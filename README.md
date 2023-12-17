@@ -1,111 +1,65 @@
-# Full-Stack My Sqlite
-### Part 00
-Create a class called `MySqliteRequest` in `my_sqlite_request.rb`. It will have a similar behavior than a request on the real sqlite.
+# Description
 
-All methods, except `run`, will return an `instance` of `my_sqlite_request`. You will build the request by progressive call and execute the request by calling run.
+Many programming languages have bindings to the SQLite library. It generally follows PostgreSQL syntax, but does not enforce type checking by default.[8][9] This means that one can, for example, insert a string into a column defined as an integer.
 
-Each row must have an ID.
+D. Richard Hipp designed SQLite in the spring of 2000 while working for General Dynamics on contract with the United States Navy.[10] Hipp was designing software used for a damage-control system aboard guided-missile destroyers, which originally used HP-UX with an IBM Informix database back-end. SQLite began as a Tcl extension.[11]
 
-We will do only `1` join and `1` where per request.
+In August 2000, version 1.0 of SQLite was released, with storage based on gdbm (GNU Database Manager). In September 2001, SQLite 2.0 replaced gdbm with a custom B-tree implementation, adding transaction capability. In June 2004, SQLite 3.0 added internationalization, manifest typing, and other major improvements, partially funded by America Online. In 2011, Hipp announced his plans to add a NoSQL interface to SQLite, as well as announcing UnQL, a functional superset of SQL designed for document-oriented databases.[12] In 2018, SQLite adopted a Code of Conduct based on the Rule of Saint Benedict which caused some controversy and was later renamed as a Code of Ethics.[13]
 
-### Example00:
-```
-request = MySqliteRequest.new
-request = request.from('nba_player_data.csv')
-request = request.select('name')
-request = request.where('birth_state', 'Indiana')
-request.run
-=> [{"name" => "Andre Brown"]
-```
-### Example01:
-```
-Input: MySqliteRequest.new('nba_player_data').select('name').where('birth_state', 'Indiana').run
-Output: [{"name" => "Andre Brown"]
-```
-Constructor It will be prototyped:
-`def initialize`
+# Task
 
-From Implement a `from` method which must be present on each request. From will take a parameter and it will be the name of the `table`. (technically a table_name is also a filename (.csv))
-It will be prototyped:
+Remember to git add && git commit && git push each exercise!
 
-`def from(table_name)`
+We will execute your function with our test(s), please DO NOT PROVIDE ANY TEST(S) in your file
 
-Select Implement a `where` method which will take one argument a string OR an array of string. It will continue to build the request. During the run() you will collect on the result only the columns sent as parameters to select :-).
-It will be prototyped:
+For each exercise, you will have to create a folder and in this folder, you will have additional files that contain your work. Folder names are provided at the beginning of each exercise under submit directory and specific file names for each exercise are also provided at the beginning of each exercise under submit file(s).
 
-`def select(column_name)`
-OR
-`def select([column_name_a, column_name_b])`
+Create a class User, it will be your interface in order to
 
-Where Implement a `where` method which will take 2 arguments: column_name and value. It will continue to build the request. During the run() you will filter the result which match the value.
-It will be prototyped:
+create user
+find user
+get all users
+update user
+destroy user in sqlite.
+You will use the gem sqlite3. The sqlite filename will be named db.sql.
 
-`def where(column_name, criteria)`
+Your table will be name users and will have multiple attributes:
 
-Join Implement a join method which will load another filename_db and will join both database on a on column.
-It will be prototyped:
+firstname as string
+lastname as string
+age as integer
+password as string
+email as string
+Your class will have the following methods:
 
-def join(column_on_db_a, filename_db_b, column_on_db_b)
+def create(user_info) It will create a user. User info will be: firstname, lastname, age, password and email And it will return a unique ID (a positive integer)
 
-Order Implement an order method which will received two parameters, order (:asc or :description) and column_name. It will sort depending on the order base on the column_name.
-It will be prototyped:
+def find(user_id) It will retrieve the associated user and return all information contained in the database.
 
-def order(order, column_name)
+def all It will retrieve all users and return a hash of users.
 
-Insert Implement a method to insert which will receive a table name (filename). It will continue to build the request.
-def insert(table_name)
+def update(user_id, attribute, value) It will retrieve the associated user, update the attribute send as parameter with the value and return the user hash.
 
-Values Implement a method to values which will receive data. (a hash of data on format (key => value)). It will continue to build the request. During the run() you do the insert.
-def values(data)
+def destroy(user_id) It will retrieve the associated user and destroy it from your database.
 
-Update Implement a method to update which will receive a table name (filename). It will continue to build the request. An update request might be associated with a where request.
-def update(table_name)
+# Usage
 
-Set Implement a method to update which will receive data (a hash of data on format (key => value)). It will perform the update of attributes on all matching row. An update request might be associated with a where request.
-def set(data)
+GET on /users. This action will return all users (without their passwords).
 
-Delete Implement a delete method. It set the request to delete on all matching row. It will continue to build the request. An delete request might be associated with a where request.
-def delete
+POST on /users. Receiving firstname, lastname, age, password and email. It will create a user and store in your database and returns the user created (without password).
 
-Run Implement a run method and it will execute the request.
-Part 01
-Create a program which will be a Command Line Interface (CLI) to your MySqlite class.
-It will use readline and we will run it with ruby my_sqlite_cli.rb.
+POST on /sign_in. Receiving email and password. It will add a session containing the user_id in order to be logged in and returns the user created (without password).
 
-It will accept request with:
+PUT on /users. This action require a user to be logged in. It will receive a new password and will update it. It returns the user created (without password).
 
-SELECT|INSERT|UPDATE|DELETE
-FROM
-WHERE (max 1 condition)
-JOIN ON (max 1 condition) Note, you can have multiple WHERE. Yes, you should save and load the database from a file. :-)
-** Example 00 ** (Ruby)
+DELETE on /sign_out. This action require a user to be logged in. It will sign_out the current user. It returns nothing (code 204 in HTTP).
 
-$>ruby my_sqlite_cli.rb class.db
-MySQLite version 0.1 20XX-XX-XX
-my_sqlite_cli> SELECT * FROM students;
-Jane|me@janedoe.com|A|http://blog.janedoe.com
-my_sqlite_cli>INSERT INTO students VALUES (John, john@johndoe.com, A, https://blog.johndoe.com);
-my_sqlite_cli>UPDATE students SET email = 'jane@janedoe.com', blog = 'https://blog.janedoe.com' WHERE name = 'Jane';
-my_sqlite_cli>DELETE FROM students WHERE name = 'John';
-my_sqlite_cli>quit
-$>
-** Example 00 ** (Javascript)
+DELETE on /users. This action require a user to be logged in. It will sign_out the current user and it will destroy the current user. It returns nothing (code 204 in HTTP).
 
-$>node my_sqlite_cli.js class.db
-MySQLite version 0.1 20XX-XX-XX
-my_sqlite_cli> SELECT * FROM students;
-Jane|me@janedoe.com|A|http://blog.janedoe.com
-my_sqlite_cli>INSERT INTO students VALUES (John, john@johndoe.com, A, https://blog.johndoe.com);
-my_sqlite_cli>UPDATE students SET email = 'jane@janedoe.com', blog = 'https://blog.janedoe.com' WHERE name = 'Jane';
-my_sqlite_cli>DELETE FROM students WHERE name = 'John';
-my_sqlite_cli>quit
-$>
-Our examples will use these CSV
-Nba Player Data
-Nba Players
+For the signed in method, we will be using session & cookies In order to perform a request with curl and save cookies (Be aware it's not the same flags to save & load)
 
-In addition to accomplishing this challenge. You should take a read about those concepts:
 
-B-Tree (not binary tree "B-Tree")
-TRIE
-Reverse Index
+
+# Installation
+
+
