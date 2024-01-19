@@ -79,7 +79,7 @@ FROM
 WHERE (max 1 condition)
 JOIN ON (max 1 condition) Note, you can have multiple WHERE. Yes, you should save and load the database from a file. :-)
 ** Example 00 ** (Ruby)
-
+```
 $>ruby my_sqlite_cli.rb class.db
 MySQLite version 0.1 20XX-XX-XX
 my_sqlite_cli> SELECT * FROM students;
@@ -89,8 +89,10 @@ my_sqlite_cli>UPDATE students SET email = 'jane@janedoe.com', blog = 'https://bl
 my_sqlite_cli>DELETE FROM students WHERE name = 'John';
 my_sqlite_cli>quit
 $>
+```
 ** Example 00 ** (Javascript)
 
+```
 $>node my_sqlite_cli.js class.db
 MySQLite version 0.1 20XX-XX-XX
 my_sqlite_cli> SELECT * FROM students;
@@ -100,6 +102,7 @@ my_sqlite_cli>UPDATE students SET email = 'jane@janedoe.com', blog = 'https://bl
 my_sqlite_cli>DELETE FROM students WHERE name = 'John';
 my_sqlite_cli>quit
 $>
+```
 Our examples will use these CSV
 Nba Player Data
 Nba Players
